@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>بازی بخش‌های کلمه</title>
+<title>بازی هم‌آغاز</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#fff7e0;--card:#fff;--ink:#2b2b3a;--c:#ff7a59;--ok:#2fb86b;--bad:#e5484d;--empty:#fff;--line:#c9c2ad}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1b2b;--card:#2a2840;--ink:#f4f1ff;--empty:#2a2840;--line:#6c6890}}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#e8f6ff;--card:#fff;--ink:#2b2b3a;--c:#4a90e2;--ok:#2fb86b;--bad:#e5484d;--line:#c5d3e0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b2233;--card:#27304a;--ink:#f1f4ff;--line:#55618a}}
 html{height:100%}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:'Vazirmatn',Tahoma,sans-serif;display:flex;flex-direction:column;align-items:center;padding:14px}
@@ -16,91 +16,79 @@ h1{font-size:22px;margin:4px 0 2px;font-weight:900}
 .bar{display:flex;gap:6px;margin-bottom:10px}
 .dot{width:12px;height:12px;border-radius:50%;background:var(--line)}
 .dot.on{background:var(--c)}.dot.done{background:var(--ok)}
-.card{background:var(--card);border-radius:28px;padding:20px 16px;width:100%;max-width:420px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.15)}
-.pic{font-size:110px;line-height:1.1;animation:pop .4s}
+.card{background:var(--card);border-radius:28px;padding:18px 14px;width:100%;max-width:440px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.15)}
+.pic{font-size:100px;line-height:1.1;animation:pop .4s}
 @keyframes pop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
-.word{font-size:46px;font-weight:900;margin:4px 0 2px}
-.say{border:0;background:none;font-size:30px;cursor:pointer}
-.circles{display:flex;justify-content:center;gap:10px;margin:14px 0;flex-wrap:wrap}
-.circ{width:58px;height:58px;border-radius:50%;border:4px dashed var(--line);background:var(--empty);cursor:pointer;transition:.15s}
-.circ.on{background:var(--c);border:4px solid var(--c);transform:scale(1.08)}
-.circ.ok{background:var(--ok);border-color:var(--ok)}
-.circ.bad{background:var(--bad);border-color:var(--bad)}
-.msg{min-height:34px;font-size:20px;font-weight:700;margin:4px 0}
-.btns{display:flex;gap:10px;justify-content:center;margin-top:8px}
-button.b{font-family:inherit;font-size:18px;font-weight:700;border:0;border-radius:16px;padding:12px 22px;cursor:pointer;color:#fff;background:var(--c)}
-button.b.g{background:var(--ok)}
-button.b.s{background:#8a86a8}
-.parts{font-size:26px;font-weight:900;letter-spacing:2px}
+.word{font-size:40px;font-weight:900;margin:2px 0}
+.say{border:0;background:none;font-size:28px;cursor:pointer}
+.q{font-size:18px;font-weight:700;margin:10px 0 8px}
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.opt{border:4px solid var(--line);border-radius:20px;background:transparent;color:var(--ink);padding:10px 2px;cursor:pointer;font-family:inherit;transition:.15s}
+.opt .e{font-size:48px;display:block}
+.opt .t{font-size:18px;font-weight:700}
+.opt.ok{border-color:var(--ok);background:rgba(47,184,107,.2);transform:scale(1.06)}
+.opt.bad{border-color:var(--bad);background:rgba(229,72,77,.18)}
+.msg{min-height:34px;font-size:20px;font-weight:700;margin:10px 0 4px}
+button.b{font-family:inherit;font-size:18px;font-weight:700;border:0;border-radius:16px;padding:12px 26px;cursor:pointer;color:#fff;background:var(--c)}
 </style>
 </head>
 <body>
-<h1>🎨 بخش‌های کلمه</h1>
-<div class="sub">کلمه را بخوان و بگو چند بخش دارد.<br>به تعداد بخش‌ها دایره‌ها را رنگ کن!</div>
+<h1>🔤 کدام هم‌آغاز است؟</h1>
+<div class="sub">کلمه بالا را بگو. کدام تصویر پایین با آن شروع یکسان دارد؟</div>
 <div class="bar" id="bar"></div>
 <div class="card">
   <div class="pic" id="pic"></div>
   <div class="word" id="word"></div>
   <button class="say" id="say" aria-label="بخوان">🔊</button>
-  <div class="circles" id="circles"></div>
+  <div class="q" id="q">روی تصویر درست بزن 👇</div>
+  <div class="opts" id="opts"></div>
   <div class="msg" id="msg"></div>
-  <div class="parts" id="parts"></div>
-  <div class="btns">
-    <button class="b g" id="check">بررسی ✔️</button>
-    <button class="b s" id="next" style="display:none">بعدی ➡️</button>
-  </div>
+  <button class="b" id="next" style="display:none">بعدی ➡️</button>
 </div>
 <script>
-const words=[
- {w:'مسجد',p:['مَس','جِد'],e:'🕌'},
- {w:'مدرسه',p:['مَد','ر','سه'],e:'🏫'},
- {w:'آزاده',p:['آ','زا','دِه'],e:'👧'},
- {w:'کتاب',p:['کِ','تاب'],e:'📖'},
- {w:'امین',p:['اَ','مین'],e:'👦'},
- {w:'مدیر',p:['مُ','دیر'],e:'👨‍💼'},
- {w:'آبی',p:['آ','بی'],e:'🔵'}
+const R=[
+ {w:'آب',e:'💧',o:[['کتاب','📖'],['کیف','🎒'],['آبی','🔵']],a:'آبی',s:'آ'},
+ {w:'کتاب',e:'📖',o:[['کیف','🎒'],['مدرسه','🏫'],['مدیر','👨‍💼']],a:'کیف',s:'ک'},
+ {w:'مدرسه',e:'🏫',o:[['ماشین','🚗'],['آب','💧'],['کتاب','📖']],a:'ماشین',s:'م'}
 ];
-const MAX=5;let i=0,done=false,score=0;
+let i=0,score=0,done=false;
 const $=id=>document.getElementById(id);
-function bar(){$('bar').innerHTML=words.map((_,k)=>`<div class="dot ${k<i?'done':k==i?'on':''}"></div>`).join('')}
-function show(){
-  done=false;const c=words[i];
-  $('pic').textContent=c.e;$('pic').style.animation='none';void $('pic').offsetWidth;$('pic').style.animation='';
-  $('word').textContent=c.w;$('msg').textContent='';$('parts').textContent='';
-  $('circles').innerHTML='';
-  for(let k=0;k<MAX;k++){const d=document.createElement('div');d.className='circ';
-    d.onclick=()=>{if(done)return;d.classList.toggle('on')};$('circles').appendChild(d)}
-  $('check').style.display='';$('next').style.display='none';bar();
-}
+function bar(){$('bar').innerHTML=R.map((_,k)=>`<div class="dot ${k<i?'done':k==i?'on':''}"></div>`).join('')}
 function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='fa-IR';u.rate=.7;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
-$('say').onclick=()=>speak(words[i].w);
-$('check').onclick=()=>{
-  if(done)return;const c=words[i];
-  const cs=[...document.querySelectorAll('.circ')];
-  const n=cs.filter(x=>x.classList.contains('on')).length;
-  if(n===0){$('msg').textContent='اول دایره‌ها را رنگ کن 🙂';return}
-  done=true;
-  if(n===c.p.length){
-    score++;cs.forEach(x=>{if(x.classList.contains('on'))x.classList.add('ok')});
-    $('msg').textContent='آفرین! 🎉 '+c.p.length+' بخش';
-  }else{
-    cs.forEach(x=>{if(x.classList.contains('on'))x.classList.add('bad')});
-    $('msg').textContent='این کلمه '+c.p.length+' بخش دارد 💪';
-  }
-  $('parts').textContent=c.p.join(' - ');
-  $('check').style.display='none';$('next').style.display='';
-  $('next').textContent=i===words.length-1?'پایان 🏁':'بعدی ➡️';
-};
+$('say').onclick=()=>speak(R[i].w);
+function show(){
+  done=false;const r=R[i];
+  $('pic').textContent=r.e;$('pic').style.animation='none';void $('pic').offsetWidth;$('pic').style.animation='';
+  $('word').textContent=r.w;$('msg').textContent='';$('next').style.display='none';
+  $('q').style.display='';$('opts').style.display='';
+  $('opts').innerHTML='';
+  r.o.forEach(([t,e])=>{
+    const b=document.createElement('button');b.className='opt';
+    b.innerHTML=`<span class="e">${e}</span><span class="t">${t}</span>`;
+    b.onclick=()=>{
+      if(done)return;
+      if(t===r.a){
+        done=true;score++;b.classList.add('ok');
+        $('msg').textContent='آفرین! 🎉 هر دو با «'+r.s+'» شروع می‌شوند';
+        $('next').style.display='';
+        $('next').textContent=i===R.length-1?'پایان 🏁':'بعدی ➡️';
+      }else{
+        b.classList.add('bad');$('msg').textContent='دوباره فکر کن 🙂';
+      }
+    };
+    $('opts').appendChild(b);
+  });
+  bar();
+}
 $('next').onclick=()=>{
-  if(i<words.length-1){i++;show()}
-  else{
-    i=words.length;bar();
+  if(i<R.length-1){i++;show()}
+  else if(i===R.length-1){
+    i=R.length;bar();
     $('pic').textContent='🏆';$('word').textContent='آفرین!';
-    $('circles').innerHTML='';$('parts').textContent='';
-    $('msg').textContent=score+' از '+words.length+' درست بود';
+    $('q').style.display='none';$('opts').style.display='none';
+    $('msg').textContent='همه را پیدا کردی!';
     $('next').textContent='دوباره 🔁';
-    $('next').onclick=()=>{i=0;score=0;location.reload()};
-  }
+  }else{location.reload()}
 };
 show();
 </script>
