@@ -3,137 +3,125 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>جدول را کامل کن – پایه اول</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap">
+<title>ماجرای آ و ا</title>
 <style>
-:root{--bg:#f3f8ff;--ink:#1d2b53;--or:#e8772e;--ok:#22b573;--sun:#ffc533;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a33;--ink:#f1f5ff}}
-:root[data-theme="dark"]{--bg:#121a33;--ink:#f1f5ff}
-*{box-sizing:border-box}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Vazirmatn",Tahoma,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px}
-h1{font-size:clamp(1.3rem,4.5vw,1.9rem);font-weight:900;margin:6px 0 12px;text-align:center}
-.lv{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:14px}
-.lv button,.next{font:inherit;font-weight:700;border:3px solid var(--ink);background:#fff;color:#1d2b53;border-radius:12px;padding:6px 14px;cursor:pointer}
-.lv button.on{background:var(--sun)}
-button:focus-visible{outline:4px solid var(--sun);outline-offset:2px}
-.tbl{display:grid;direction:ltr;border:3px solid var(--or);background:#fff;width:min(100%,var(--w))}
-.tbl>*{aspect-ratio:1;border:2px solid var(--or);background:#fff;padding:4px;margin:0;font:inherit;min-width:0}
-.tbl svg,.opts svg{width:100%;height:100%;display:block}
-.corner{background:var(--or)!important}
-.cell.empty{border:3px dashed var(--or);cursor:pointer}
-.cell.sel{box-shadow:inset 0 0 0 4px var(--sun);background:#fff8dc}
-.cell.solved{background:#e6f8ef}
-.cell.bad{animation:sh .4s}
-@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-.hint{margin:14px 0 8px;font-weight:700}
-.opts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:480px}
-.opts button{width:84px;height:84px;padding:4px;background:#fff;border:3px solid var(--ink);border-radius:14px;cursor:pointer}
-.win{display:none;margin-top:14px;text-align:center;font-weight:900;font-size:1.3rem}
-.win.show{display:block}
-.next{background:var(--sun);margin-top:8px;font-size:1.05rem}
-@media (prefers-reduced-motion:reduce){.cell.bad{animation:none}}
+:root{--bg:#14123a;--card:#241f5c;--text:#fff;--muted:#b9b5e8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;overflow:hidden;-webkit-user-select:none;user-select:none}
+.wrap{max-width:480px;height:100%;margin:0 auto;display:flex;flex-direction:column;position:relative}
+.hud{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;font-size:17px;font-weight:700}
+.hud span{background:rgba(255,255,255,.1);border-radius:14px;padding:4px 12px}
+#msg{position:absolute;top:52px;left:0;right:0;text-align:center;font-size:17px;font-weight:700;pointer-events:none;transition:opacity .4s;opacity:0;padding:0 14px}
+canvas{flex:1;width:100%;touch-action:none;display:block}
+.ov{position:absolute;inset:0;background:rgba(10,8,40,.88);display:flex;align-items:center;justify-content:center;padding:22px;text-align:center}
+.ov .box{background:var(--card);border-radius:26px;padding:26px 22px;max-width:340px}
+.ov h1{margin:0 0 6px;font-size:26px}
+.ov p{color:var(--muted);line-height:1.9;margin:8px 0;font-size:15px}
+.ov button{margin-top:12px;border:0;border-radius:18px;padding:14px 38px;font:inherit;font-size:20px;font-weight:700;background:#f59f00;color:#2b1d00;cursor:pointer}
+.hide{display:none}
 </style>
 </head>
 <body>
-<h1>مانند نمونه، جدول را کامل کن</h1>
-<div class="lv" id="lv" role="group" aria-label="مرحله‌ها"></div>
-<div class="tbl" id="tbl"></div>
-<div class="hint" id="hint">خانهٔ خالی را ببین و تصویر درست را انتخاب کن.</div>
-<div class="opts" id="opts"></div>
-<div class="win" id="win"><div>آفرین! جدول کامل شد ⭐</div><button class="next" id="next">مرحلهٔ بعد</button></div>
+<div class="wrap">
+  <div class="hud"><span>⭐ <b id="sc">۰</b></span><span id="lvl">مرحله ۱</span><span id="lv">❤️❤️❤️</span></div>
+  <div id="msg"></div>
+  <canvas id="c"></canvas>
+  <div class="ov" id="ov"><div class="box">
+    <h1>✨ ماجرای آ و ا</h1>
+    <p>۱۲ کارت تصویری (بدون تکرار) از آسمون می‌افتن! اسم زیر تصویر رو بخون و پایین‌ترین‌شون رو بفرست به دوست درست:</p>
+    <p><b style="color:#ff922b">آ اول</b> ← سمت راست<br><b style="color:#4dabf7">ا غیر اول</b> ← سمت چپ</p>
+    <p>روی نصف راست یا چپ صفحه بزن. ۵ جواب درست پشت‌سرهم، زمان رو کند می‌کنه!</p>
+    <button id="go">شروع</button>
+  </div></div>
+</div>
 <script>
-const P={
-roofB:'<polygon points="14,46 50,14 86,46" fill="#3aa0f0"/>',
-roofR:'<polygon points="14,46 50,14 86,46" fill="#e5383b"/>',
-house:'<rect x="26" y="46" width="48" height="42" fill="#fff" stroke="#555" stroke-width="2"/><rect x="34" y="60" width="14" height="28" fill="#f4c20d" stroke="#555"/><rect x="56" y="56" width="12" height="12" fill="#fff" stroke="#555"/><path d="M62 56v12M56 62h12" stroke="#555"/>',
-shirtY:'<polygon points="30,14 42,10 58,10 70,14 88,32 78,42 69,35 69,56 31,56 31,35 22,42 12,32" fill="#f4c20d" stroke="#b8860b"/>',
-shirtG:'<polygon points="30,14 42,10 58,10 70,14 88,32 78,42 69,35 69,56 31,56 31,35 22,42 12,32" fill="#43b04a" stroke="#2d7d33"/>',
-pantsR:'<polygon points="32,54 68,54 72,94 55,94 50,70 45,94 28,94" fill="#e5383b" stroke="#a4161a"/>',
-pantsB:'<polygon points="32,54 68,54 72,94 55,94 50,70 45,94 28,94" fill="#2f7fe0" stroke="#1d4f99"/>',
-star:'<polygon points="50,8 57,24 74,25 61,36 65,52 50,43 35,52 39,36 26,25 43,24" fill="#f4c20d" stroke="#d99a00"/>',
-moon:'<path d="M60 8a22 22 0 1 0 0 40a17 17 0 1 1 0-40z" fill="#f4c20d" stroke="#d99a00"/>',
-sun:'<g stroke="#f4a100" stroke-width="3" stroke-linecap="round"><path d="M50 4v7M50 45v7M26 28h-7M81 28h-7M33 11l4 4M67 11l-4 4M33 45l4-4M67 45l-4-4"/></g><circle cx="50" cy="28" r="13" fill="#ffc533"/>',
-mountain:'<polygon points="4,92 28,58 52,92" fill="#e2c4ac" stroke="#b08968"/><polygon points="48,92 72,58 96,92" fill="#e2c4ac" stroke="#b08968"/>',
-tree:'<rect x="46" y="66" width="8" height="26" fill="#8a5a2b"/><circle cx="38" cy="62" r="13" fill="#4caf50"/><circle cx="62" cy="62" r="13" fill="#4caf50"/><circle cx="50" cy="52" r="14" fill="#4caf50"/>',
-appleR:'<path d="M50 34C30 22 12 40 18 62C24 86 44 90 50 84C56 90 76 86 82 62C88 40 70 22 50 34z" fill="#e5383b" stroke="#a4161a" stroke-width="2"/>',
-appleY:'<path d="M50 34C30 22 12 40 18 62C24 86 44 90 50 84C56 90 76 86 82 62C88 40 70 22 50 34z" fill="#f4c20d" stroke="#b8860b" stroke-width="2"/>',
-leaf:'<path d="M50 34C48 12 66 6 80 8C80 26 68 36 50 34z" fill="#4caf50" stroke="#2d7d33" stroke-width="2"/>'};
-const car=(f,s)=>'<rect x="12" y="52" width="76" height="28" rx="6" fill="'+f+'" stroke="'+s+'" stroke-width="2"/><rect x="28" y="38" width="44" height="18" rx="5" fill="'+f+'" stroke="'+s+'" stroke-width="2"/><rect x="34" y="42" width="14" height="11" fill="#cfe8ff"/><rect x="52" y="42" width="14" height="11" fill="#cfe8ff"/>';
-const pet=(f,s)=>'<g fill="'+f+'" stroke="'+s+'"><circle cx="50" cy="12" r="9"/><circle cx="65" cy="24" r="9"/><circle cx="35" cy="24" r="9"/><circle cx="59" cy="38" r="9"/><circle cx="41" cy="38" r="9"/></g><circle cx="50" cy="27" r="8" fill="#8a5a2b"/>';
-const scoop=(f,s)=>'<circle cx="50" cy="38" r="18" fill="'+f+'" stroke="'+s+'" stroke-width="2"/>';
-const hat=f=>'<polygon points="50,6 32,40 68,40" fill="'+f+'" stroke="#555" stroke-width="2"/><circle cx="50" cy="8" r="4" fill="#ffc533"/>';
-const face=(f,s)=>'<circle cx="50" cy="66" r="26" fill="'+f+'" stroke="'+s+'" stroke-width="2"/><circle cx="41" cy="62" r="3" fill="#333"/><circle cx="59" cy="62" r="3" fill="#333"/><path d="M40 74Q50 84 60 74" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>';
-Object.assign(P,{
-carR:car('#e5383b','#a4161a'),carB:car('#2f7fe0','#1d4f99'),
-wheels:'<circle cx="32" cy="82" r="9" fill="#333"/><circle cx="68" cy="82" r="9" fill="#333"/>',
-flag:'<line x1="50" y1="12" x2="50" y2="40" stroke="#555" stroke-width="3"/><polygon points="50,12 76,20 50,28" fill="#ffc533" stroke="#d99a00"/>',
-petalR:pet('#e5383b','#a4161a'),petalY:pet('#f4c20d','#b8860b'),petalP:pet('#9b59d0','#6c3a99'),
-stem:'<path d="M50 46V92" stroke="#2e8b3a" stroke-width="5"/><path d="M50 76C36 76 30 66 28 60C42 60 48 66 50 76z" fill="#4caf50"/><path d="M50 68C64 68 70 58 72 52C58 52 52 58 50 68z" fill="#4caf50"/>',
-cone:'<polygon points="30,52 70,52 50,94" fill="#e0a458" stroke="#a9742a" stroke-width="2"/><path d="M38 58l12 24M62 58L50 82" stroke="#a9742a" stroke-width="1.5"/>',
-cup:'<polygon points="26,52 74,52 66,92 34,92" fill="#cfe8ff" stroke="#5a8fc4" stroke-width="2"/>',
-scoopP:scoop('#ff9ec4','#d6628f'),scoopB:scoop('#8a5a2b','#5a3a1b'),
-hatR:hat('#e5383b'),hatB:hat('#2f7fe0'),
-faceA:face('#ffd9b3','#c98f5b'),faceB:face('#c68642','#8d5524')});
-const svg=(...k)=>'<svg viewBox="0 0 100 100" aria-hidden="true">'+k.map(x=>P[x]).join('')+'</svg>';
-const arrow='<svg viewBox="0 0 100 100"><path d="M18 84Q22 30 74 24" fill="none" stroke="#ffc533" stroke-width="7" stroke-dasharray="1 11" stroke-linecap="round"/><polygon points="72,12 94,24 72,38" fill="#e5383b"/></svg>';
-const L=[
-{n:"خانه",top:["roofB","roofR"],left:["house"]},
-{n:"لباس",top:["shirtY","shirtG"],left:["pantsR","pantsB"]},
-{n:"آسمان",top:["star","moon","sun"],left:["mountain","tree"]},
-{n:"سیب",top:["leaf"],left:["appleR","appleY"]},
-{n:"ماشین",top:["wheels","flag"],left:["carR","carB"]},
-{n:"گل",top:["petalR","petalY","petalP"],left:["stem"]},
-{n:"بستنی",top:["scoopP","scoopB"],left:["cone","cup"]},
-{n:"شب و روز",top:["sun","moon"],left:["house","tree"]},
-{n:"کلاه",top:["hatR","hatB"],left:["faceA","faceB"]}];
+const $=id=>document.getElementById(id),cv=$("c"),ctx=cv.getContext("2d");
+const A=[["آب","💧"],["آش","🍲"],["آهو","🦌"],["آینه","🪞"],["آفتاب","☀️"],["آتش","🔥"],["آبشار","🏞️"],["آشپز","👨‍🍳"],["آجیل","🥜"],["آبمیوه","🧃"],["آدم‌برفی","⛄"],["آسمان","🌌"]];
+const N=[["نان","🍞"],["ماه","🌙"],["کتاب","📚"],["باران","🌧️"],["ماهی","🐟"],["گاو","🐄"],["باغ","🌳"],["پا","🦶"],["دریا","🌊"],["سالاد","🥗"],["ساعت","⏰"],["خانه","🏠"],["کاغذ","📄"],["ماشین","🚗"],["قایق","⛵"],["بادکنک","🎈"],["جارو","🧹"]];
 const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
-const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
-let lv=0,done,sel,lock;
-const $=id=>document.getElementById(id);
-function build(i){
-  lv=i;const d=L[i];lock=false;
-  done=d.left.map((_,r)=>d.top.map((_,c)=>r===0&&c===0));
-  $("lv").innerHTML="";
-  L.forEach((x,j)=>{const b=document.createElement("button");b.textContent=fa(j+1);b.setAttribute("aria-label","مرحلهٔ "+fa(j+1));b.className=j===i?"on":"";b.onclick=()=>build(j);$("lv").appendChild(b)});
-  $("win").classList.remove("show");$("hint").style.display="";
-  const cols=d.top.length+1;
-  const t=$("tbl");t.style.gridTemplateColumns="repeat("+cols+",minmax(0,1fr))";t.style.setProperty("--w",cols*110+"px");
-  const opts=[];
-  d.left.forEach((_,r)=>{d.top.forEach((_,c)=>opts.push([r,c]));opts.push([r,-1])});
-  $("opts").innerHTML="";
-  shuffle(opts).forEach(([r,c])=>{const b=document.createElement("button");b.innerHTML=c<0?svg(d.left[r]):svg(d.left[r],d.top[c]);b.setAttribute("aria-label","گزینه");b.onclick=()=>pick(r,c);$("opts").appendChild(b)});
-  nextEmpty();draw();
-}
-function nextEmpty(){const d=L[lv];sel=null;for(let r=0;r<d.left.length&&!sel;r++)for(let c=0;c<d.top.length;c++)if(!done[r][c]){sel=[r,c];break}}
+let W,H,dpr,run=false,deck=[],sc,lives,combo,lvl,corr,words,fx,parts,spawn,slow,shake,bounce={A:0,N:0},eat={A:0,N:0},lastW="",best=0,prev=0,tm=0,msgT;
+try{best=+localStorage.getItem("alefBest")||0}catch(e){}
+const stars=Array.from({length:45},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.6+.4,p:Math.random()*6}));
+function rs(){dpr=devicePixelRatio||1;W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
+addEventListener("resize",rs);
+let ac;function beep(f,d=.12,ty="sine"){try{ac=ac||new AudioContext();const o=ac.createOscillator(),g=ac.createGain();o.type=ty;o.frequency.value=f;g.gain.value=.07;o.connect(g);g.connect(ac.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.stop(ac.currentTime+d)}catch(e){}}
+function say(t,col){const m=$("msg");m.textContent=t;m.style.color=col||"#fff";m.style.opacity=1;clearTimeout(msgT);msgT=setTimeout(()=>m.style.opacity=0,2200)}
+function hud(){$("sc").textContent=fa(sc);$("lvl").textContent="کارت "+fa(12-deck.length-words.length)+" از ۱۲";$("lv").textContent="❤️".repeat(Math.max(lives,0))+"🖤".repeat(Math.max(3-lives,0))}
+function start(){sc=0;lives=3;combo=0;lvl=1;corr=0;words=[];fx=[];parts=[];spawn=.4;slow=0;shake=0;lastW="";deck=buildDeck();run=true;$("ov").classList.add("hide");hud();say("آماده باش!")}
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function buildDeck(){return shuf(shuf(A).slice(0,6).map(p=>({p,isA:true})).concat(shuf(N).slice(0,6).map(p=>({p,isA:false}))))}
+function mk(){const c=deck.pop(),p=c.p,isA=c.isA;
+  return{w:p[0],e:p[1],isA,x:W*.22+Math.random()*W*.56,y:-70,ph:Math.random()*6}}
+function burst(x,y,col,n){for(let i=0;i<n;i++){const a=Math.random()*6.28,s=60+Math.random()*180;parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-60,l:.8,c:col})}}
+function floorY(){return H-190}
+function lose(w,why){lives--;combo=0;shake=.35;beep(150,.3,"sawtooth");
+  say(why+(w.isA?"«"+w.w+"» با «آ» شروع می‌شه":"«"+w.w+"» «ا» داره ولی اولش نیست"),"#ff8787");
+  burst(w.x,floorY(),"#ff6b6b",16);hud();if(lives<=0)over()}
+function answer(side){if(!run)return;
+  let a=null;for(const w of words)if(!a||w.y>a.y)a=w;if(!a)return;
+  words.splice(words.indexOf(a),1);
+  const ok=(side==="A")===a.isA,tx=side==="A"?W*.75:W*.25;
+  fx.push({w:a.w,e:a.e,x:a.x,y:a.y,tx,ty:H-85,t:0,ok});eat[side]=.35;
+  if(ok){combo++;const pts=10*(1+Math.floor(combo/5));sc+=pts;corr++;bounce[side]=.4;beep(520+combo*25,.12,"triangle");
+    burst(tx,H-110,side==="A"?"#ffa94d":"#74c0fc",14);say(combo>=3?"🔥 "+fa(combo)+" پشت‌سرهم! +"+fa(pts):"آفرین! +"+fa(pts),"#8ce99a");
+    if(combo%5===0){slow=4;say("⭐ زمان کند شد!","#ffd43b");beep(880,.3)}
+    if(corr%4===0){lvl++;say("🚀 مرحله "+fa(lvl)+"!","#ffd43b");beep(700,.4)}
+    hud()}
+  else lose(a,"اشتباه شد! ")}
+function over(){run=false;try{if(sc>best){best=sc;localStorage.setItem("alefBest",best)}}catch(e){}
+  const o=$("ov");o.classList.remove("hide");
+  o.innerHTML='<div class="box"><h1>بازی تموم شد</h1><p>امتیاز تو: <b>'+fa(sc)+'</b><br>بهترین امتیاز: <b>'+fa(Math.max(best,sc))+'</b><br>رسیدی به مرحلهٔ '+fa(lvl)+'</p><button id="go2">دوباره</button></div>';
+  $("go2").onclick=start}
+function win(){run=false;try{if(sc>best){best=sc;localStorage.setItem("alefBest",best)}}catch(e){}beep(784,.2);setTimeout(()=>beep(988,.3),200);
+  const o=$("ov");o.classList.remove("hide");
+  o.innerHTML='<div class="box"><h1>🎉 آفرین!</h1><p>هر ۱۲ کارت رو تموم کردی<br>امتیاز: <b>'+fa(sc)+'</b><br>بهترین امتیاز: <b>'+fa(Math.max(best,sc))+'</b><br>'+"⭐".repeat(lives)+'</p><button id="go3">دوباره</button></div>';$("go3").onclick=start}
+function update(dt){
+  const k=slow>0?.4:1;slow=Math.max(0,slow-dt);shake=Math.max(0,shake-dt);
+  for(const s of["A","N"]){bounce[s]=Math.max(0,bounce[s]-dt);eat[s]=Math.max(0,eat[s]-dt)}
+  spawn-=dt*(slow>0?.6:1);if(spawn<=0&&deck.length){words.push(mk());spawn=Math.max(.9,2.3-lvl*.18)}
+  if(!deck.length&&!words.length&&run&&lives>0){win();return}
+  const v=(55+lvl*14)*k;
+  for(let i=words.length-1;i>=0;i--){const w=words[i];w.y+=v*dt;w.ph+=dt*3;
+    if(w.y>floorY()){words.splice(i,1);lose(w,"دیر شد! ")}}
+  for(let i=fx.length-1;i>=0;i--){const f=fx[i];f.t+=dt*3.2;if(f.t>=1)fx.splice(i,1)}
+  for(let i=parts.length-1;i>=0;i--){const p=parts[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=400*dt;p.l-=dt;if(p.l<=0)parts.splice(i,1)}}
+function rr(x,y,w,h,r){ctx.beginPath();ctx.roundRect?ctx.roundRect(x,y,w,h,r):ctx.rect(x,y,w,h)}
+function card(o,x,y,active,alpha){const w=o.w;ctx.save();ctx.globalAlpha=alpha==null?1:alpha;
+  const cw=Math.max(116,w.length*20+44);
+  rr(x-cw/2,y-62,cw,124,22);ctx.fillStyle="#fff";ctx.fill();
+  if(active){ctx.lineWidth=5;ctx.strokeStyle="#ffd43b";ctx.stroke()}
+  ctx.fillStyle="#2b2160";ctx.font="700 26px Vazirmatn,Tahoma,sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.direction="rtl";ctx.fillText(w,x,y+40);ctx.font="58px serif";ctx.fillText(o.e,x,y-16);ctx.restore()}
+function chr(x,col,letter,hat,b,e,label){const y=H-85-Math.sin(b*Math.PI/.4)*28;
+  ctx.save();ctx.translate(x,y);
+  ctx.beginPath();ctx.ellipse(0,0,50,46,0,0,6.28);ctx.fillStyle=col;ctx.fill();
+  ctx.fillStyle="#fff";for(const ex of[-17,17]){ctx.beginPath();ctx.arc(ex,-14,10,0,6.28);ctx.fill()}
+  ctx.fillStyle="#222";for(const ex of[-17,17]){ctx.beginPath();ctx.arc(ex,-13,4.5,0,6.28);ctx.fill()}
+  ctx.beginPath();if(e>0){ctx.ellipse(0,8,14,12,0,0,6.28);ctx.fillStyle="#5c1a1a";ctx.fill()}
+  else{ctx.arc(0,4,13,.15*Math.PI,.85*Math.PI);ctx.lineWidth=4;ctx.strokeStyle="#222";ctx.stroke()}
+  ctx.fillStyle="#fff";ctx.font="700 26px Tahoma,sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(letter,0,32);
+  if(hat){ctx.font="52px serif";ctx.fillText("🎩",0,-52)}
+  ctx.restore();
+  ctx.fillStyle="rgba(255,255,255,.75)";ctx.font="700 14px Vazirmatn,Tahoma,sans-serif";ctx.textAlign="center";ctx.fillText(label,x,H-24)}
 function draw(){
-  const d=L[lv],t=$("tbl");t.innerHTML='<div class="corner">'+arrow+'</div>';
-  d.top.forEach(k=>{const e=document.createElement("div");e.innerHTML=svg(k);t.appendChild(e)});
-  d.left.forEach((k,r)=>{
-    const e=document.createElement("div");e.innerHTML=svg(k);t.appendChild(e);
-    d.top.forEach((tk,c)=>{
-      const b=document.createElement("button");b.id="c"+r+"_"+c;
-      const ok=done[r][c];
-      b.className="cell"+(ok?(r===0&&c===0?"":" solved"):" empty")+(sel&&sel[0]===r&&sel[1]===c?" sel":"");
-      b.innerHTML=ok?svg(k===undefined?"":d.left[r],tk):"";
-      b.setAttribute("aria-label",ok?"خانهٔ پر":"خانهٔ خالی");
-      b.onclick=()=>{if(!ok&&!lock){sel=[r,c];draw()}};
-      t.appendChild(b);
-    });
-  });
-}
-function pick(r,c){
-  if(!sel||lock)return;
-  const [sr,sc]=sel;
-  if(r===sr&&c===sc){
-    done[sr][sc]=true;nextEmpty();draw();
-    if(!sel){lock=true;$("hint").style.display="none";$("win").classList.add("show");$("next").textContent=lv<L.length-1?"مرحلهٔ بعد":"از اول شروع کن"}
-  }else{
-    const e=$("c"+sr+"_"+sc);e.classList.remove("bad");void e.offsetWidth;e.classList.add("bad");
-  }
-}
-$("next").onclick=()=>build(lv<L.length-1?lv+1:0);
-build(0);
+  const h=(210+lvl*35)%360,g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"hsl("+h+",55%,14%)");g.addColorStop(1,"hsl("+h+",55%,30%)");
+  ctx.save();ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  if(shake>0)ctx.translate((Math.random()-.5)*10,(Math.random()-.5)*10);
+  for(const s of stars){ctx.globalAlpha=.4+.5*Math.abs(Math.sin(tm+s.p));ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(s.x*W,s.y*H,s.r,0,6.28);ctx.fill()}
+  ctx.globalAlpha=1;
+  if(slow>0){ctx.fillStyle="rgba(255,212,59,.12)";ctx.fillRect(0,0,W,H)}
+  ctx.setLineDash([8,8]);ctx.strokeStyle="rgba(255,255,255,.25)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,floorY());ctx.lineTo(W,floorY());ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle="rgba(255,255,255,.06)";ctx.fillRect(W/2-1,floorY(),2,H);
+  let a=null;for(const w of words)if(!a||w.y>a.y)a=w;
+  for(const w of words)card(w,w.x+Math.sin(w.ph)*8,w.y,w===a);
+  for(const f of fx){const t=f.t,x=f.x+(f.tx-f.x)*t,y=f.y+(f.ty-f.y)*t;card(f,x,y,false,1-t*.8)}
+  chr(W*.25,"#339af0","ا",false,bounce.N,eat.N,"ا غیر اول");
+  chr(W*.75,"#f76707","آ",false,bounce.A,eat.A,"آ اول");
+  for(const p of parts){ctx.globalAlpha=Math.max(p.l,0);ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,4,0,6.28);ctx.fill()}
+  ctx.restore()}
+function loop(ts){const dt=Math.min((ts-prev)/1000,.05);prev=ts;tm+=dt;if(run)update(dt);draw();requestAnimationFrame(loop)}
+cv.addEventListener("pointerdown",e=>{const r=cv.getBoundingClientRect();answer(e.clientX-r.left>r.width/2?"A":"N")});
+addEventListener("keydown",e=>{if(e.key==="ArrowRight")answer("A");if(e.key==="ArrowLeft")answer("N")});
+$("go").onclick=start;
+rs();sc=0;lives=3;lvl=1;words=[];fx=[];parts=[];slow=0;shake=0;requestAnimationFrame(t=>{prev=t;loop(t)});
 </script>
 </body>
 </html>
